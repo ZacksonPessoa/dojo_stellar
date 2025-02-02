@@ -1,0 +1,21 @@
+# Usa uma imagem do Python 3.10
+FROM python:3.10
+
+# Define o diretório de trabalho dentro do container
+WORKDIR /app
+
+# Copia apenas o requirements.txt primeiro (para otimizar cache)
+COPY stellar_explorer/requirements.txt ./
+
+
+# Instala as dependências antes de copiar o código
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Agora copia o restante dos arquivos do backend
+COPY stellar_explorer/ ./
+
+# Expõe a porta usada pelo Flask
+EXPOSE 5000
+
+# Comando para iniciar o backend
+CMD ["python", "app.py"]

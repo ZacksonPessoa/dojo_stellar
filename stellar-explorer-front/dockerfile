@@ -1,0 +1,32 @@
+# Usa a imagem do Node.js para compilar o frontend
+FROM node:18 AS builder
+
+# Define o diretório de trabalho
+WORKDIR /app
+
+
+COPY stellar-explorer-front/package.json stellar-explorer-front/package-lock.json ./
+RUN npm install
+
+COPY stellar-explorer-front ./
+
+# Copia os arquivos do frontend para o container
+#COPY . .
+
+# Instala as dependências do React
+#RUN npm install
+
+# Gera a build do frontend
+RUN npm run build
+
+# Usa uma imagem leve do Nginx para servir o frontend
+FROM nginx:alpine
+
+# Copia os arquivos gerados para o diretório do Nginx
+COPY --from=builder /app/build /usr/share/nginx/html
+
+# Expõe a porta 80 para servir a aplicação
+EXPOSE 80
+
+# Inicia o Nginx
+CMD ["nginx", "-g", "daemon off;"]

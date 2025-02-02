@@ -6,7 +6,7 @@ app = Flask(__name__)
 CORS(app)  # Habilita CORS para todas as rotas
 
 # URL do Horizon do seu nó Stellar Testnet
-HORIZON_URL = "http://localhost:8000"
+HORIZON_URL = "http://horizon:8000"
 
 # Rota para buscar um bloco pelo número (ledger)
 @app.route("/block/<int:ledger_id>", methods=["GET"])

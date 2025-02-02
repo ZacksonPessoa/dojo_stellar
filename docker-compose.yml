@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: stellar_explorer/Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - HORIZON_URL=http://horizon:8000  # Configura a URL do Horizon no backend
+    depends_on:
+      - horizon
+    restart: always
+
+  frontend:
+    build:
+      context: .
+      dockerfile: ./stellar-explorer-front/Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    restart: always
+
+  horizon:
+    image: stellar/quickstart:testing
+    command: ["--testnet", "--enable-soroban-rpc"]
+    ports:
+      - "8000:8000"
+    restart: always
